@@ -51,9 +51,34 @@ Wenn eine Eigenschaft P für alle Listen gelten soll:
 - beide Fälle abdecken
 - für den Fall x # xs beweisen: P xs \<Rightarrow> P (x # xs)
 *)
+
+lemma less_equal_merge : 
+      "less_equal_list x xs \<Longrightarrow> less_equal_list x ys \<Longrightarrow>
+       less_equal_list x (merge xs ys)"
+  apply (induction xs ys rule: merge.induct)
+  apply (auto)
+  done
+
+lemma le_less_equal :
+  "x \<le> y \<Longrightarrow> less_equal_list y ys \<Longrightarrow> less_equal_list x ys"
+  apply (induction ys)
+  apply (auto)
+  done
+
+lemma not_le_less_equal:
+  "\<not> x \<le> y \<Longrightarrow> less_equal_list x xs \<Longrightarrow> less_equal_list y xs"
+  apply (induction xs)
+  apply (auto)
+  done
+
+lemma "sorted xs \<Longrightarrow> sorted ys \<Longrightarrow> sorted (merge xs ys)"
+  apply (induction xs ys rule: merge.induct)
+  apply (auto simp: less_equal_merge le_less_equal not_le_less_equal)
+  done
+
 theorem "sorted (mergesort xs)"
   apply (induction xs rule: mergesort.induct) (* mergesort hat 3 Fälle *)
   apply (auto)
-  done  
+  oops  
 
 end
