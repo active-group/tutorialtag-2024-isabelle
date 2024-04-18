@@ -71,14 +71,14 @@ lemma not_le_less_equal:
   apply (auto)
   done
 
-lemma "sorted xs \<Longrightarrow> sorted ys \<Longrightarrow> sorted (merge xs ys)"
+lemma merge_preserves_sorted: "sorted xs \<Longrightarrow> sorted ys \<Longrightarrow> sorted (merge xs ys)"
   apply (induction xs ys rule: merge.induct)
   apply (auto simp: less_equal_merge le_less_equal not_le_less_equal)
   done
 
 theorem "sorted (mergesort xs)"
   apply (induction xs rule: mergesort.induct) (* mergesort hat 3 Fälle *)
-  apply (auto)
-  oops  
+  apply (auto simp: merge_preserves_sorted)
+  done  
 
 end
