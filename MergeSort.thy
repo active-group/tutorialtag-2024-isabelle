@@ -32,4 +32,13 @@ fun less_equal_list :: "'a \<Rightarrow> ('a :: linorder) list \<Rightarrow> boo
       then less_equal_list x ys
       else False)"
 *)
+
+(* Ist Liste sortiert? *)
+fun sorted :: "('a :: linorder) list \<Rightarrow> bool"
+  where
+    "sorted [] = True"
+  | "sorted (x # xs) =
+      (less_equal_list x xs \<and> sorted xs)"
+
+
 end
