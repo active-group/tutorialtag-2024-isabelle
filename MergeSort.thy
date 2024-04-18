@@ -40,5 +40,20 @@ fun sorted :: "('a :: linorder) list \<Rightarrow> bool"
   | "sorted (x # xs) =
       (less_equal_list x xs \<and> sorted xs)"
 
+(*
+Induktion über induktive Daten:
+
+Eine ist Liste eins der folgenden:
+- []
+- eine Cons-Liste der Form x # xs
+
+Wenn eine Eigenschaft P für alle Listen gelten soll:
+- beide Fälle abdecken
+- für den Fall x # xs beweisen: P xs \<Rightarrow> P (x # xs)
+*)
+theorem "sorted (mergesort xs)"
+  apply (induction xs rule: mergesort.induct) (* mergesort hat 3 Fälle *)
+  apply (auto)
+  done  
 
 end
