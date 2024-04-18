@@ -81,4 +81,43 @@ theorem "sorted (mergesort xs)"
   apply (auto simp: merge_preserves_sorted)
   done  
 
+(* Brauchen außerdem noch:
+   Jedes Element der Eingabeliste ist auch in der Ausgabeliste
+   ... in gleicher Anzahl
+   ... und umgekehrt!
+*)
+
+fun count :: "'a \<Rightarrow> 'a list \<Rightarrow> nat"
+  where
+    "count x [] = 0"
+    (* Suc = + 1 / Nachfolger *)
+  | "count x (y # ys) = 
+     (if x = y 
+      then Suc (count x ys)
+      else count x ys)"
+
+
+lemma merge_commutes_count : 
+  "count x (merge xs ys) = count x xs + count x ys"
+  apply (induction xs ys rule: merge.induct)
+  apply (auto)
+  done
+
+(* @ = "append" *)
+
+lemma take_drop_append: "take n xs @ drop n xs = xs"
+  apply (induction xs)
+  apply (auto)
+  done
+
+lemma append_commutes_count: "count x xs + count x ys = count x (xs @ ys)"
+  apply (induction xs)
+  apply (auto)
+  done
+
+theorem "count x (mergesort xs) = count x xs"
+  apply (induction xs rule: mergesort.induct)
+  apply (auto simp: merge_commutes_count append_commutes_count)
+  done
+
 end
